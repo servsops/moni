@@ -29,6 +29,7 @@ template "/opt/influxdb/shared/config.toml" do
   group "root"
   variables({ :seed_server => seed_server, :hostname => current_ip })
   source "config.toml.erb"
+  notifies :restart, "service[influxdb]", :delayed
 end
 
 service "influxdb" do
