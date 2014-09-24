@@ -2,6 +2,13 @@
 # if have multiple hosts in the role, config other hosts to use the first host as seed server
 
 seed_server = nil
+current_ip = nil
+
+if Dir.exists?("/home/vagrant")
+  current_ip = node[:network][:interfaces][:eth1][:addresses].detect{|k,v| v[:family] == "inet" }.first
+else
+  current_ip = node.cloud.private_ips[0]
+end
 
 if node[:moni][:discovery] && node[:hostname] != "#{node[:moni][:discovery]}1"
   nodes = search(:node, "role:#{node[:moni][:discovery]}")
@@ -20,6 +27,16 @@ template "/opt/influxdb/shared/config.toml" do
   mode 0644
   owner "root"
   group "root"
-  variables({ :seed_server => seed_server })
+  variables({ :seed_server => seed_server, :hostname => current_ip })
   source "config.toml.erb"
 end
+
+service "influxdb" do
+  supports :restart => true, :status => true, :reload => true
+  action [ :enable, :start ]
+end
+
+
+
+# delete a server out of the cluster (23 is the server id)
+# curl -X DELETE 'http://localhost:8086/cluster/servers/23?u=root&p=root'

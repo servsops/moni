@@ -1,0 +1,8 @@
+
+description "Graphite-API server"
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+respawn
+
+exec gunicorn -w2 graphite_api.app:app -b 0.0.0.0:8888
