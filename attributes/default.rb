@@ -1,0 +1,1 @@
+default[:moni][:discovery] = "influxdb"
