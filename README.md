@@ -23,7 +23,7 @@ ubuntu 14.04
   </tr>
 </table>
 
-### chef roles
+### Chef roles
 
 Layer: Influxdb
 
