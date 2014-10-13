@@ -1,8 +1,10 @@
 
 
-path = "http://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb"
-
-version = node[:moni][:influxdb][:version]
+if node[:moni][:influxdb][:version]
+  version = node[:moni][:influxdb][:version]
+else
+  version = "latest"
+end
 
 path = "http://s3.amazonaws.com/influxdb/influxdb_#{version}_amd64.deb"
 
